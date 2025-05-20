@@ -3,7 +3,7 @@ import React from 'react';
 const Contact = () => {
   return (
     <div className="App-header min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-6">Contact Us</h1>
+      {/* <h1 className="text-3xl font-bold mb-6">Contact Us</h1> */}
       <div className="bg-white bg-opacity-10 rounded-lg shadow-md p-6 w-full max-w-md">
         <div className="mb-6">
           <p className="mb-2">📧 Email：contact@minsgarden.com</p>
