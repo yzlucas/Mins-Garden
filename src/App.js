@@ -1,6 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Contact from './components/Contact';
+import Admin from './components/Admin';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
               </div>
             } />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
           <nav
             className=""
@@ -32,7 +34,7 @@ function App() {
             <Link
               to="/contact"
               className="text-xl font-semibold"
-              style={{ color: 'white', textDecoration: 'none' }}
+              style={{ color: 'white', textDecoration: 'none', marginRight: '20px' }}
             >
               Contact Us
             </Link>
