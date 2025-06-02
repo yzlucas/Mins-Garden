@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Admin() {
   const [groupOrder, setGroupOrder] = useState({
@@ -10,11 +11,21 @@ function Admin() {
     pickupLocation: ''
   });
 
+  const [error, setError] = useState('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: 这里添加与后端的交互逻辑
-    console.log('提交的团购订单:', groupOrder);
-    alert('团购订单创建成功！');
+    setError('');
+
+    // verify date
+    if (new Date(groupOrder.endDate) <= new Date(groupOrder.startDate)) {
+      setError('End date must be later than start date');
+      return;
+    }
+
+    // TODO: backend connection
+    console.log('submitted group order:', groupOrder);
+    alert('Group order created successfully!');
   };
 
   const handleChange = (e) => {
@@ -23,6 +34,18 @@ function Admin() {
       ...prev,
       [name]: value
     }));
+
+    if (error) {
+      setError('');
+    }
+
+    // if modifying start date, and end date is earlier than new start date, update end date
+    if (name === 'startDate' && groupOrder.endDate && new Date(value) >= new Date(groupOrder.endDate)) {
+      setGroupOrder(prev => ({
+        ...prev,
+        endDate: value
+      }));
+    }
   };
 
   return (
@@ -34,21 +57,47 @@ function Admin() {
       borderRadius: '12px',
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     }}>
-      <h1 style={{
-        fontSize: '28px',
-        color: '#2c3e50',
-        marginBottom: '30px',
-        textAlign: 'center',
-        fontWeight: '600'
-      }}>Admin Page</h1>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '30px'
+      }}>
+        <h1 style={{
+          fontSize: '28px',
+          color: '#2c3e50',
+          fontWeight: '600'
+        }}>添加订单</h1>
+        <Link
+          to="/admin/orders"
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          管理订单
+        </Link>
+      </div>
       <div style={{ marginTop: '20px' }}>
-        <h2 style={{
-          fontSize: '22px',
-          color: '#34495e',
-          marginBottom: '25px',
-          fontWeight: '500'
-        }}>Create Order</h2>
-        <form onSubmit={handleSubmit} style={{ 
+        {error && (
+          <div style={{
+            backgroundColor: '#fee2e2',
+            color: '#dc2626',
+            padding: '12px',
+            borderRadius: '6px',
+            marginBottom: '20px',
+            fontSize: '14px'
+          }}>
+            {error}
+          </div>
+        )}
+        
+        <form onSubmit={handleSubmit} style={{
           display: 'flex', 
           flexDirection: 'column', 
           gap: '20px',
@@ -63,7 +112,7 @@ function Admin() {
               color: '#2c3e50',
               fontWeight: '500',
               fontSize: '14px'
-            }}>Group Order Name：</label>
+            }}>订单名称：</label>
             <input
               type="text"
               name="title"
@@ -89,7 +138,7 @@ function Admin() {
               color: '#2c3e50',
               fontWeight: '500',
               fontSize: '14px'
-            }}>Description：</label>
+            }}>描述：</label>
             <textarea
               name="description"
               value={groupOrder.description}
@@ -116,7 +165,7 @@ function Admin() {
               color: '#2c3e50',
               fontWeight: '500',
               fontSize: '14px'
-            }}>Start Date：</label>
+            }}>开始时间：</label>
             <input
               type="datetime-local"
               name="startDate"
@@ -142,13 +191,14 @@ function Admin() {
               color: '#2c3e50',
               fontWeight: '500',
               fontSize: '14px'
-            }}>End Date：</label>
+            }}>结束时间：</label>
             <input
               type="datetime-local"
               name="endDate"
               value={groupOrder.endDate}
               onChange={handleChange}
               required
+              min={groupOrder.startDate}
               style={{ 
                 width: '100%', 
                 padding: '12px',
@@ -168,7 +218,7 @@ function Admin() {
               color: '#2c3e50',
               fontWeight: '500',
               fontSize: '14px'
-            }}>Pickup Time：</label>
+            }}>取货时间：</label>
             <input
               type="datetime-local"
               name="pickupTime"
@@ -194,7 +244,7 @@ function Admin() {
               color: '#2c3e50',
               fontWeight: '500',
               fontSize: '14px'
-            }}>Pickup Location：</label>
+            }}>取货地点：</label>
             <input
               type="text"
               name="pickupLocation"
@@ -214,7 +264,7 @@ function Admin() {
             />
           </div>
 
-          <button 
+          <button
             type="submit"
             style={{
               padding: '12px 24px',
@@ -232,7 +282,7 @@ function Admin() {
               }
             }}
           >
-            Submit
+            提交
           </button>
         </form>
       </div>

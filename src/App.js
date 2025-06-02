@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Contact from './components/Contact';
 import Admin from './components/Admin';
+import OrderManagement from './components/OrderManagement';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             } />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/orders" element={<OrderManagement />} />
           </Routes>
           <nav
             className=""
